@@ -122,7 +122,7 @@ No unir mediante un glob todos los snapshots Bronze o Gold: contaría repetidame
 | source/ | Fuentes regenerables/exportadas |
 | requirements.txt | Versiones exactas usadas |
 
-## Integración con V3
+## Integración con V3 (Realizamos con Docker para el Taller 2)
 
 Exportar una corrida real cerrada y PASS:
 
@@ -148,23 +148,6 @@ Siete pruebas base locales aprobadas; una prueba Delta opcional queda omitida en
 
 Un fallo deja failure.json sin sustituir current. Un proceso simultáneo se rechaza con .pipeline.lock. Si una interrupción abrupta deja el lock, comprobar que no haya pipeline activo antes de retirarlo. Un --root nuevo permite aislar otro ensayo. No borrar datos V3.
 
-## GitHub obligatorio
-
-El paquete está listo para versionar. El equipo debe publicar el repositorio remoto con su cuenta; no se han publicado archivos externamente. Crear un repositorio vacío en GitHub y, en una carpeta extraída sin .git:
-
-    git init -b main
-    git add .
-    git commit -m "Implementa mini lakehouse TrackAmazonas taller 3"
-    git remote add origin URL_DEL_REPOSITORIO_DEL_EQUIPO
-    git push -u origin main
-
-Reemplazar la URL y configurar identidad Git si se solicita. .gitignore excluye entornos, SQLite y snapshots grandes. El README regenera datos; docs y evidence_referencia sí se incluyen.
-
-## Defensa y producción
-
-El análisis de las propuestas aportadas está en docs/ANALISIS_COMPARATIVO.md. Se conservaron el resumen horario y el versionado como profundización. Se corrigieron SCD sin lookup temporal, promedios de promedios y benchmark con poblaciones distintas. No se añadieron heading, signal_quality, clientes, paquetes ni órdenes que la V3 no implementa. Tampoco se calcula una distancia multiplicando cada muestra por 30 segundos cuando no hay continuidad de captura.
-
-La guía práctica permite Python sin dbt ni Great Expectations. Esos frameworks quedan como alternativas de evolución, sin afirmarlos como instalados. Metabase con DuckDB necesita un driver de terceros y compatibilidad comprobada; el reporte HTML cubre la visualización local base.
 
 ### Delta opcional no acreditado en esta validación
 
@@ -187,15 +170,15 @@ La guía indica 20 minutos; el módulo 15. La guía de laboratorio propone ambas
 
 Producción: carga incremental por ingestion_time con desempate, catálogo histórico real, particiones afectadas por tardíos, object storage, Iceberg/Delta, publicación transaccional, compactación, monitoreo y acceso restringido. El corredor V3 es una simplificación espacial. Anomalías se cuentan como muestras, no delitos ni accidentes.
 
-## Integrantes y docente
+## Integrantes
 
 Cristian Valdes Díaz; Miguel Rendón Barrios; Johan Galeano Pulgarín; Fabian Diaz Hurtado; Juan Rodríguez Leguizamón.
 
-Docente Roberto Carlos Rahamut Suteu. ITM. Tópicos Avanzados en Bases de Datos, 2026-2S.
+ITM. Tópicos Avanzados en Bases de Datos, 2026-2S.
 
 ## Fuentes
 
-Guía, rúbrica y presentación del Módulo 3 aportadas por el equipo.
+Guía, rúbrica y presentación del Módulo 3.
 
 [DuckDB Parquet](https://duckdb.org/docs/current/data/parquet/overview),
 [particiones](https://duckdb.org/docs/current/data/partitioning/hive_partitioning),
