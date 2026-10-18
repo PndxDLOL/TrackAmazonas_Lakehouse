@@ -1,0 +1,4 @@
+route_id,rio,muestras,velocidades_validas,velocidad_media_kmh,anomalia_pct
+R-Amazonas-sintetica,Amazonas,16591,16542,15.126,9.168
+R-Putumayo-sintetica,Putumayo,16589,16538,15.262,4.907
+R-Caqueta-sintetica,Caqueta,16518,16468,15.235,2.973

@@ -1,0 +1,200 @@
+{
+  "execution_id": "9593406b6562",
+  "batch_id": "3ba122bff35036803914",
+  "reused": false,
+  "duration_s": 17.606,
+  "result": "PASS",
+  "quality": {
+    "bronze_rows": 50550,
+    "silver_rows": 49698,
+    "discarded_rows": 852,
+    "retained_pct": 98.3145,
+    "reasons": {
+      "INVALID_TIME": 85,
+      "INVALID_COORDINATES": 85,
+      "MISSING_ID": 85,
+      "IDENTITY_CONFLICT": 100,
+      "DUPLICATE_RETRY": 497
+    },
+    "conservation_pass": true,
+    "event_time_min": "2026-01-01 00:00:00",
+    "event_time_max": "2026-03-31 00:05:29",
+    "vessels": 800,
+    "missing_speed_rows": 150,
+    "speed_min": 0.0,
+    "speed_max": 24.0,
+    "speed_avg": 15.207751332041608,
+    "policy": "Velocidad ausente permanece NULL; conflictos válidos excluyen todas sus versiones; retrasos se conservan."
+  },
+  "validation": {
+    "fact_rows": 49698,
+    "unique_events": 49698,
+    "vessel_versions": 880,
+    "vessels": 800,
+    "scd_changed_vessels": 80,
+    "lookup_exactly_one": true,
+    "scd_current_unique": true,
+    "foreign_keys_pass": true,
+    "scd_interval_policy": "[valid_from, valid_to); NULL representa fin abierto",
+    "fact_grain": "Una fila por event_id válido de telemetría",
+    "aggregate_grain": "Una fila por año, mes y río",
+    "hourly_rows": 4000,
+    "hourly_count_reconciled": true,
+    "hourly_grain": "Una fila por hora UTC, versión de embarcación, río y ruta"
+  },
+  "benchmark": {
+    "comparisons": [
+      {
+        "label": "SQLite fuente vs DuckDB Gold",
+        "equal_results": true,
+        "left_ms": [
+          289.8319000014453,
+          361.0303999957978,
+          282.18679999554297,
+          256.6581999999471,
+          271.2119999996503,
+          255.60699999914505,
+          339.9591999987024
+        ],
+        "right_ms": [
+          63.629099997342564,
+          60.325999998894986,
+          57.630600000265986,
+          52.59669999941252,
+          53.86249999719439,
+          55.10789999971166,
+          58.08689999685157
+        ],
+        "left_median_ms": 282.18679999554297,
+        "right_median_ms": 57.630600000265986,
+        "left_min_ms": 255.60699999914505,
+        "right_min_ms": 52.59669999941252,
+        "ratio_left_over_right": 4.896475136372701,
+        "result_rows": 9,
+        "repeats": 7,
+        "cache": "warm",
+        "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+      },
+      {
+        "label": "Opt 1 Parquet monolítico vs particionado",
+        "equal_results": true,
+        "left_ms": [
+          15.493599996261764,
+          18.03039999504108,
+          11.6450999994413,
+          13.051599999016616,
+          12.115900004573632,
+          18.208499997854233,
+          17.23900000069989
+        ],
+        "right_ms": [
+          30.57759999501286,
+          22.797500001615845,
+          20.440600004803855,
+          26.474700003745966,
+          24.868799999239855,
+          27.736399999412242,
+          37.16569999960484
+        ],
+        "left_median_ms": 15.493599996261764,
+        "right_median_ms": 26.474700003745966,
+        "left_min_ms": 11.6450999994413,
+        "right_min_ms": 20.440600004803855,
+        "ratio_left_over_right": 0.5852228729341424,
+        "result_rows": 1,
+        "repeats": 7,
+        "cache": "warm",
+        "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+      },
+      {
+        "label": "Opt 2 detalle estrella vs agregado mensual",
+        "equal_results": true,
+        "left_ms": [
+          88.23719999782043,
+          86.4134000003105,
+          82.97670000320068,
+          81.77889999933541,
+          98.77570000389824,
+          80.76099999743747,
+          84.87849999801256
+        ],
+        "right_ms": [
+          25.243399999453686,
+          24.261500002467074,
+          24.17560000321828,
+          26.74239999760175,
+          31.190400004561525,
+          27.07350000127917,
+          26.172800004133023
+        ],
+        "left_median_ms": 84.87849999801256,
+        "right_median_ms": 26.172800004133023,
+        "left_min_ms": 80.76099999743747,
+        "right_min_ms": 24.17560000321828,
+        "ratio_left_over_right": 3.243004186965443,
+        "result_rows": 9,
+        "repeats": 7,
+        "cache": "warm",
+        "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+      }
+    ],
+    "environment": {
+      "os": "Windows 11",
+      "python": "3.12.14",
+      "machine": "AMD64",
+      "duckdb": "1.5.6",
+      "pandas": "3.0.1",
+      "pyarrow": "26.0.0",
+      "sqlite": "3.53.1",
+      "duckdb_threads": 1
+    },
+    "source_profile": "academic_sqlite",
+    "fact_rows": 49698,
+    "month_filter": {
+      "year": 2026,
+      "month": 2
+    },
+    "methodology": "Comparación académica local: tipos convertidos y validación por IDs en SQLite; métricas preparadas en Gold. No aísla solo el formato columnar.",
+    "mongo_measured": false
+  },
+  "source_metadata": {
+    "profile": "academic_sqlite",
+    "rows_requested": 50000,
+    "seed": 42,
+    "synthetic": true,
+    "dataset_version": "2.0.0",
+    "description": "Ráfagas GPS cada 30 s en cinco ventanas de 800 barcos dentro de 90 días; no es captura continua."
+  },
+  "gold": "lakehouse\\gold\\3ba122bff35036803914_9593406b6562",
+  "silver": "lakehouse\\silver\\3ba122bff35036803914_9593406b6562",
+  "bronze": "lakehouse\\bronze\\3ba122bff35036803914",
+  "snapshot_hashes": {
+    "lakehouse\\silver\\3ba122bff35036803914_9593406b6562\\position_events.parquet": "9f0faabf6abc13d25f84a327923429d9e6018b00aa9531180358c762bf21bacb",
+    "lakehouse\\silver\\3ba122bff35036803914_9593406b6562\\quality.json": "bdabd4a0b020d19a7dfcd7266e4fa1390e4f32957b475f9b74d34df2661ddba0",
+    "lakehouse\\silver\\3ba122bff35036803914_9593406b6562\\quarantine.parquet": "a3b18a9ddae1cf2029424bc03b01a35e5b7662c9dcc2b0eb88dbdbbf25b02157",
+    "lakehouse\\silver\\3ba122bff35036803914_9593406b6562\\reporte_calidad.txt": "085839c00e829f274d3c662c1273eb690d3ae56201487d554793800510c1904f",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\agg_embarcacion_hora.parquet": "9724f3233b359cee848d7f67610c3f4e317a1761f81098c0dbd082ddf5d996d5",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\agg_rio_mes.parquet": "ff1acbfb02e325fcc19974923e41998838166fdf472575eb96be1718d69dd492",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\dim_embarcacion.parquet": "c3e84e2ac33c02cfd2da548e7912918b23ebb1da3c2ff913a4c8d3840b5a77b2",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\dim_rio.parquet": "535c7092fb7b63d8561bbf694f80d5362230b6036e72a0e2096f217be44479ce",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\dim_ruta.parquet": "e8a89dc1bd4e5309876dc6140df873559130f49b23e8238b100102b74ae76e4b",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\dim_tiempo.parquet": "c17a3a2ffbd0ef8edd0ef4521cf06e7cb45c4da7eb13fe45c65aab0bcf4de40b",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\fact_unpartitioned.parquet": "01201281ac53b5e5497f2922d284be516e38479283a0efb3151adc1e3ebc590c",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\scd_demo.csv": "d2e18eca923c8f7562c672b97994cc4fae575b5782309f07973ab5ebb2554312",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\validation.json": "770cef3187762a5ed3f8694fc6cff124573a832582e47613294e7b931d153427",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\fact_telemetria\\year=2026\\month=1\\data_0.parquet": "630d2ba86961ec1646e8eef7cac114a4cdf97c8779a8280520b37c3cc1ef2ee5",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\fact_telemetria\\year=2026\\month=2\\data_0.parquet": "13cbe114a385fcc484a8a12d9b24ba200cd15fb56473f9e5b98c99cea37499c2",
+    "lakehouse\\gold\\3ba122bff35036803914_9593406b6562\\fact_telemetria\\year=2026\\month=3\\data_0.parquet": "2e3575eb3ce4b53959e62e674aeaaa3dc68a45e1c62c9eca661d353726eb4001"
+  },
+  "queries": [
+    "01_muestras_rio_mes",
+    "02_retraso_llegada",
+    "03_comparacion_rutas",
+    "04_embarcaciones_priorizar",
+    "05_historia_scd",
+    "06_tardios_por_fecha",
+    "07_resumen_horario",
+    "08_retrasos_por_ruta"
+  ],
+  "created_at": "2026-10-18T15:12:22.103680+00:00"
+}

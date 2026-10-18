@@ -1,0 +1,227 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Q1. Volumen y tasas sobre muestras, no número de accidentes. SELECT r.river_name AS rio,t.anio,t.mes,   count(*) AS muestras,sum(f.anomaly_sample) AS muestras_anomalas,   round(100.0*sum(f.anomaly_sample)/count(*),3) AS tasa_anomalia_pct,   round(avg(f.speed_kmh),3) AS velocidad_media_kmh FROM fact_telemetria f JOIN dim_tiempo t ON f.date_sk=t.date_sk JOIN dim_rio r ON f.river_sk=r.river_sk GROUP BY r.river_name,t.anio,t.mes ORDER BY t.anio,t.mes,r.river_name; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0518s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_decompress_integ│
+│   ral_integer(#1, 2026)   │
+│__internal_decompress_integ│
+│     ral_integer(#2, 1)    │
+│             #3            │
+│             #4            │
+│             #5            │
+│             #6            │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│         t.anio ASC        │
+│         t.mes ASC         │
+│      r.river_name ASC     │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_compress_integra│
+│    l_utinyint(#1, 2026)   │
+│__internal_compress_integra│
+│     l_utinyint(#2, 1)     │
+│             #3            │
+│             #4            │
+│             #5            │
+│             #6            │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            rio            │
+│            anio           │
+│            mes            │
+│          muestras         │
+│     muestras_anomalas     │
+│     tasa_anomalia_pct     │
+│    velocidad_media_kmh    │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_decompress_integ│
+│   ral_integer(#1, 2026)   │
+│__internal_decompress_integ│
+│     ral_integer(#2, 1)    │
+│             #3            │
+│             #4            │
+│             #5            │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│          sum(#3)          │
+│          avg(#4)          │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         river_name        │
+│            anio           │
+│            mes            │
+│       anomaly_sample      │
+│         speed_kmh         │
+│                           │
+│                           │
+│                           │
+│        49,698 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│             #1            │
+│__internal_compress_integra│
+│    l_utinyint(#2, 2026)   │
+│__internal_compress_integra│
+│     l_utinyint(#3, 1)     │
+│             #4            │
+│                           │
+│                           │
+│                           │
+│        49,698 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│    river_sk = river_sk    ├───────────────────────────────────────────┐
+│                           │                                           │
+│                           │                                           │
+│                           │                                           │
+│        49,698 rows        │                                           │
+│           0.00s           │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │         TABLE_SCAN        │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: INNER     │                             │         Function:         │
+│                           │                             │        READ_PARQUET       │
+│        Conditions:        │                             │                           │
+│     date_sk = date_sk     │                             │        Projections:       │
+│                           │                             │          river_sk         │
+│                           │                             │         river_name        │
+│                           │                             │                           │
+│                           │                             │    Total Files Read: 1    │
+│           0.00s           │                             │                           │
+│                           │                             │        Filename(s):       │
+│                           ├──────────────┐              │ C:/Users/Juan David/.codex│
+│                           │              │              │ /visualizations/2026/09/03│
+│                           │              │              │  /01a067d3-fd1c-74b0-aaa2 │
+│                           │              │              │       -6d1bb97178e3       │
+│                           │              │              │   /taller3_lakehouse_v2   │
+│                           │              │              │      /lakehouse/gold      │
+│                           │              │              │/3ba122bff35036803914_95934│
+│                           │              │              │  06b6562/dim_rio.parquet  │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│        49,698 rows        │              │              │           3 rows          │
+│          (0.00s)          │              │              │           0.00s           │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          date_sk          ││          date_sk          │
+│          river_sk         ││            anio           │
+│         speed_kmh         ││            mes            │
+│       anomaly_sample      ││                           │
+│                           ││    Total Files Read: 1    │
+│      Dynamic Filters:     ││                           │
+│     optional: date_sk>    ││        Filename(s):       │
+│  =20260101 AND optional:  ││ C:/Users/Juan David/.codex│
+│      date_sk<=20260331    ││ /visualizations/2026/09/03│
+│ optional: river_sk>=1 AND ││  /01a067d3-fd1c-74b0-aaa2 │
+│    optional: river_sk<=3  ││       -6d1bb97178e3       │
+│                           ││   /taller3_lakehouse_v2   │
+│    Total Files Read: 3    ││      /lakehouse/gold      │
+│                           ││/3ba122bff35036803914_95934│
+│        Filename(s):       ││ 06b6562/dim_tiempo.parquet│
+│ C:/Users/Juan David/.codex││                           │
+│ /visualizations/2026/09/03││                           │
+│  /01a067d3-fd1c-74b0-aaa2 ││                           │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││           0.00s           │
+│      /lakehouse/gold      ││                           │
+│/3ba122bff35036803914_95934││                           │
+│ 06b6562/fact_telemetria/**││                           │
+│         /*.parquet        ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        49,698 rows        ││          90 rows          │
+│           0.01s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

@@ -1,0 +1,132 @@
+test_two_versions_and_original_snapshot_unchanged (test_delta_optional.DeltaOptionalTest.test_two_versions_and_original_snapshot_unchanged) ... skipped 'Profundización opcional: instalar Delta y definir RUN_DELTA=1'
+test_weighted_mean_with_null_and_unequal_groups (test_hourly.HourlyTest.test_weighted_mean_with_null_and_unequal_groups) ... ok
+test_ambiguous_scd_is_rejected (test_pipeline.PipelineTests.test_ambiguous_scd_is_rejected) ... ok
+test_end_to_end_and_idempotence (test_pipeline.PipelineTests.test_end_to_end_and_idempotence) ...   Bronze: 1618 filas; lote d3fa5112e07629c59629
+  Silver: 1589 filas; 29 descartes auditados
+  Gold: 1589 hechos; 880 versiones de embarcación
+  01_muestras_rio_mes: 6 filas (38.96 ms)
+     rio  anio  mes  muestras  muestras_anomalas  tasa_anomalia_pct  velocidad_media_kmh
+Amazonas  2026    1       265               22.0              8.302               14.618
+ Caqueta  2026    1       264                7.0              2.652               15.017
+Putumayo  2026    1       265               16.0              6.038               15.082
+  02_retraso_llegada: 3 filas (30.80 ms)
+     rio  muestras  retraso_medio_s  retraso_p95_s  retraso_p99_s  muestras_mayores_60s_pct
+Amazonas       530          579.686       2240.005      16380.245                     5.094
+ Caqueta       529          611.694          2.998      17933.302                     4.915
+Putumayo       530          591.874          2.997      16562.040                     4.906
+  03_comparacion_rutas: 3 filas (30.77 ms)
+            route_id      rio  muestras  velocidades_validas  velocidad_media_kmh  anomalia_pct
+R-Amazonas-sintetica Amazonas       530                  528               14.887         7.170
+R-Putumayo-sintetica Putumayo       530                  530               14.881         4.717
+ R-Caqueta-sintetica  Caqueta       529                  526               15.355         2.268
+  04_embarcaciones_priorizar: 0 filas (26.77 ms)
+Empty DataFrame
+Columns: [vessel_id, muestras, muestras_anomalas, anomalia_pct, retraso_p95_s]
+Index: []
+  05_historia_scd: 2 filas (35.87 ms)
+vessel_id operator_name service_class valid_from   valid_to  muestras  velocidad_media_kmh
+   TA-001    Operador A       REGULAR 2026-01-01 2026-02-15         0                  NaN
+   TA-001    Operador B   PRIORITARIA 2026-02-15        NaT         1               20.071
+  06_tardios_por_fecha: 2 filas (55.27 ms)
+     fecha  muestras  muestras_tardias  tardias_pct  embarcaciones_observadas
+2026-01-01       794              39.0        4.912                       794
+2026-03-31       795              40.0        5.031                       795
+  07_resumen_horario: 3 filas (37.54 ms)
+     rio  horas_embarcacion_observadas  filas_del_mart  muestras  velocidad_media_ponderada  tardias_pct
+Amazonas                           530             530     530.0                     14.887        5.094
+ Caqueta                           529             529     529.0                     15.355        4.915
+Putumayo                           530             530     530.0                     14.881        4.906
+  08_retrasos_por_ruta: 3 filas (60.76 ms)
+            route_id      rio  muestras  tardias_pct  retraso_mediana_s  retraso_p95_s  retraso_p99_s
+R-Amazonas-sintetica Amazonas       530        5.094              1.941       2240.005      16380.245
+ R-Caqueta-sintetica  Caqueta       529        4.915              1.972          2.998      17933.302
+R-Putumayo-sintetica Putumayo       530        4.906              1.970          2.997      16562.040
+  SQLite fuente vs DuckDB Gold: 5.196 vs 39.207 ms | ratio 0.13
+  Opt 1 Parquet monolítico vs particionado: 11.051 vs 18.997 ms | ratio 0.58
+  Opt 2 detalle estrella vs agregado mensual: 46.374 vs 18.827 ms | ratio 2.46
+  PASS en 3.684 s | evidencia: evidence\9718839722ec
+  Bronze reutilizado, sin sobrescribir: d3fa5112e07629c59629
+  Silver/Gold reutilizados: mismos hechos, claves y archivos
+  01_muestras_rio_mes: 6 filas (39.45 ms)
+     rio  anio  mes  muestras  muestras_anomalas  tasa_anomalia_pct  velocidad_media_kmh
+Amazonas  2026    1       265               22.0              8.302               14.618
+ Caqueta  2026    1       264                7.0              2.652               15.017
+Putumayo  2026    1       265               16.0              6.038               15.082
+  02_retraso_llegada: 3 filas (28.85 ms)
+     rio  muestras  retraso_medio_s  retraso_p95_s  retraso_p99_s  muestras_mayores_60s_pct
+Amazonas       530          579.686       2240.005      16380.245                     5.094
+ Caqueta       529          611.694          2.998      17933.302                     4.915
+Putumayo       530          591.874          2.997      16562.040                     4.906
+  03_comparacion_rutas: 3 filas (35.22 ms)
+            route_id      rio  muestras  velocidades_validas  velocidad_media_kmh  anomalia_pct
+R-Amazonas-sintetica Amazonas       530                  528               14.887         7.170
+R-Putumayo-sintetica Putumayo       530                  530               14.881         4.717
+ R-Caqueta-sintetica  Caqueta       529                  526               15.355         2.268
+  04_embarcaciones_priorizar: 0 filas (28.91 ms)
+Empty DataFrame
+Columns: [vessel_id, muestras, muestras_anomalas, anomalia_pct, retraso_p95_s]
+Index: []
+  05_historia_scd: 2 filas (38.56 ms)
+vessel_id operator_name service_class valid_from   valid_to  muestras  velocidad_media_kmh
+   TA-001    Operador A       REGULAR 2026-01-01 2026-02-15         0                  NaN
+   TA-001    Operador B   PRIORITARIA 2026-02-15        NaT         1               20.071
+  06_tardios_por_fecha: 2 filas (58.12 ms)
+     fecha  muestras  muestras_tardias  tardias_pct  embarcaciones_observadas
+2026-01-01       794              39.0        4.912                       794
+2026-03-31       795              40.0        5.031                       795
+  07_resumen_horario: 3 filas (46.06 ms)
+     rio  horas_embarcacion_observadas  filas_del_mart  muestras  velocidad_media_ponderada  tardias_pct
+Amazonas                           530             530     530.0                     14.887        5.094
+ Caqueta                           529             529     529.0                     15.355        4.915
+Putumayo                           530             530     530.0                     14.881        4.906
+  08_retrasos_por_ruta: 3 filas (53.07 ms)
+            route_id      rio  muestras  tardias_pct  retraso_mediana_s  retraso_p95_s  retraso_p99_s
+R-Amazonas-sintetica Amazonas       530        5.094              1.941       2240.005      16380.245
+ R-Caqueta-sintetica  Caqueta       529        4.915              1.972          2.998      17933.302
+R-Putumayo-sintetica Putumayo       530        4.906              1.970          2.997      16562.040
+  SQLite fuente vs DuckDB Gold: 5.192 vs 47.052 ms | ratio 0.11
+  Opt 1 Parquet monolítico vs particionado: 12.076 vs 19.135 ms | ratio 0.63
+  Opt 2 detalle estrella vs agregado mensual: 30.183 vs 13.859 ms | ratio 2.18
+  PASS en 2.081 s | evidencia: evidence\c19df1580613
+ok
+test_lock_preserves_current (test_pipeline.PipelineTests.test_lock_preserves_current) ... ok
+test_scd_boundary_and_stable_keys (test_pipeline.PipelineTests.test_scd_boundary_and_stable_keys) ... ok
+test_failed_pipeline_preserves_last_publication (test_v3_and_failures.SourceAndPublicationTests.test_failed_pipeline_preserves_last_publication) ... ok
+test_v3_export_preserves_raw_and_does_not_invent_scd (test_v3_and_failures.SourceAndPublicationTests.test_v3_export_preserves_raw_and_does_not_invent_scd) ...   Bronze: 2 filas; lote c0fee92c9068a94306a7
+  Silver: 2 filas; 0 descartes auditados
+  Gold: 2 hechos; 1 versiones de embarcación
+  01_muestras_rio_mes: 1 filas (56.48 ms)
+     rio  anio  mes  muestras  muestras_anomalas  tasa_anomalia_pct  velocidad_media_kmh
+Amazonas  2026    9         2                0.0                0.0                 18.0
+  02_retraso_llegada: 1 filas (31.45 ms)
+     rio  muestras  retraso_medio_s  retraso_p95_s  retraso_p99_s  muestras_mayores_60s_pct
+Amazonas         2            120.0          120.0          120.0                     100.0
+  03_comparacion_rutas: 1 filas (44.41 ms)
+            route_id      rio  muestras  velocidades_validas  velocidad_media_kmh  anomalia_pct
+R-Amazonas-sintetica Amazonas         2                    2                 18.0           0.0
+  04_embarcaciones_priorizar: 0 filas (33.49 ms)
+Empty DataFrame
+Columns: [vessel_id, muestras, muestras_anomalas, anomalia_pct, retraso_p95_s]
+Index: []
+  05_historia_scd: 1 filas (58.77 ms)
+vessel_id  operator_name  service_class          valid_from valid_to  muestras  velocidad_media_kmh
+   TA-001 NO_DOCUMENTADO NO_DOCUMENTADA 2026-09-29 12:00:01      NaT         2                 18.0
+  06_tardios_por_fecha: 1 filas (54.95 ms)
+     fecha  muestras  muestras_tardias  tardias_pct  embarcaciones_observadas
+2026-09-29         2               2.0        100.0                         1
+  07_resumen_horario: 1 filas (36.00 ms)
+     rio  horas_embarcacion_observadas  filas_del_mart  muestras  velocidad_media_ponderada  tardias_pct
+Amazonas                             1               1       2.0                       18.0        100.0
+  08_retrasos_por_ruta: 1 filas (42.61 ms)
+            route_id      rio  muestras  tardias_pct  retraso_mediana_s  retraso_p95_s  retraso_p99_s
+R-Amazonas-sintetica Amazonas         2        100.0              120.0          120.0          120.0
+  SQLite fuente vs DuckDB Gold: 0.095 vs 52.037 ms | ratio 0.00
+  Opt 1 Parquet monolítico vs particionado: 15.170 vs 22.748 ms | ratio 0.67
+  Opt 2 detalle estrella vs agregado mensual: 37.170 vs 22.987 ms | ratio 1.62
+  PASS en 4.559 s | evidencia: evidence\565cad69328c
+ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 11.679s
+
+OK (skipped=1)

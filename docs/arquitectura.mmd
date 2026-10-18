@@ -1,0 +1,19 @@
+flowchart TD
+  A[SQLite académico] --> B[Snapshot raw Bronze Parquet]
+  M[Mongo V3] --> X[Exportación snapshot BSON JSONL]
+  X --> S[Espejo SQLite fiel]
+  S --> B
+  B --> C[Silver tipado y único]
+  C --> Q[Cuarentena y reporte de calidad]
+  C --> D[Gold estrella y SCD2]
+  D --> F[Hechos particionados año y mes]
+  D --> G[Agregado mensual separado]
+  D --> H[Agregado embarcación-hora separado]
+  F --> E[DuckDB consultas y planes]
+  G --> E
+  H --> E
+  A --> K[Benchmark misma población válida]
+  E --> K
+  K --> P[Publicación del snapshot validado]
+  P --> R[Reporte HTML local de la corrida]
+  D -. ejercicio aislado .-> T[Delta experimental sin validación local]

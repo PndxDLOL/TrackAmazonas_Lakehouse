@@ -1,0 +1,16 @@
+{
+  "fact_rows": 49698,
+  "unique_events": 49698,
+  "vessel_versions": 880,
+  "vessels": 800,
+  "scd_changed_vessels": 80,
+  "lookup_exactly_one": true,
+  "scd_current_unique": true,
+  "foreign_keys_pass": true,
+  "scd_interval_policy": "[valid_from, valid_to); NULL representa fin abierto",
+  "fact_grain": "Una fila por event_id válido de telemetría",
+  "aggregate_grain": "Una fila por año, mes y río",
+  "hourly_rows": 4000,
+  "hourly_count_reconciled": true,
+  "hourly_grain": "Una fila por hora UTC, versión de embarcación, río y ruta"
+}

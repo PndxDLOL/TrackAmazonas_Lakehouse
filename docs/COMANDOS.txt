@@ -1,0 +1,89 @@
+TRACKAMAZONAS TALLER 3 - COMANDOS Y UTILIDAD
+PowerShell en la raíz del proyecto. No ejecutar todo como un script.
+
+1. ENTORNO
+python -m venv .venv
+Crear un Python aislado.
+
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+Instalar versiones. Hacerlo antes de la exposición.
+
+2. PIPELINE
+.\.venv\Scripts\python.exe main.py
+50.000 originales + defectos, Bronze/Silver/Gold, ocho consultas y benchmark.
+Con entorno activado: python main.py.
+
+.\.venv\Scripts\python.exe main.py --rows 500000 --repeats 9
+Ensayo comparable con la evidencia de referencia. Reservar para ensayo previo.
+
+.\.venv\Scripts\python.exe main.py --root "ensayo_nuevo" --rows 50000
+Aislar un ensayo. Los comandos de consulta deben usar --root ensayo_nuevo.
+
+3. RESULTADOS
+Get-Content lakehouse\current.json
+Snapshot publicado, rutas exactas de las tres zonas.
+
+Get-Content evidence\latest.json
+PASS, conteos, validaciones, perfil y tiempos.
+
+Get-ChildItem lakehouse -Recurse -Filter *.parquet
+Demostrar archivos Parquet. No sumar filas de snapshots diferentes.
+
+$estadoLake = Get-Content lakehouse\current.json -Raw | ConvertFrom-Json
+Get-Content (Join-Path $estadoLake.silver 'reporte_calidad.txt')
+Ver calidad de Silver activo.
+
+Get-Content (Join-Path $estadoLake.evidence 'benchmark.csv')
+Tiempos de la ejecución actual.
+
+Get-Content (Join-Path $estadoLake.evidence 'plans\opt1_partitioned.txt')
+Ver file filters y archivos leídos. Referencia: 1 de 3 archivos.
+
+4. DOS CONSULTAS EN VIVO
+.\.venv\Scripts\python.exe -m scripts.analyze --query 2
+Retraso medio, p95, p99 y muestras mayores a 60 s.
+Incluye el tiempo offline; no es latencia pura de red.
+
+.\.venv\Scripts\python.exe -m scripts.analyze --query 5
+SCD2 de TA-001: versiones y hechos. Solo el académico tiene cambios conocidos.
+
+Otras: --query 1 volumen/anomalías por mes; --query 3 rutas;
+--query 4 embarcaciones para revisión; --query 6 tardíos por captura.
+
+5. PRUEBAS
+.\.venv\Scripts\python.exe -m unittest discover -s tests -v
+Ver siete pruebas base aprobadas y una prueba Delta opcional omitida.
+
+6. V3 REAL OPCIONAL
+Requiere Docker activo y corrida V3 cerrada con PASS.
+El ID siguiente es un ejemplo; usar el ID del equipo.
+
+.\.venv\Scripts\python.exe -m scripts.export_v3 --compose-dir "D:\ITM\20262\TAeBD\Taller 2\TrackAmazonas_Demo_V3" --run-id 0f33dcf80937 --output source\v3_exports\run_0f33dcf80937.jsonl
+Exportar position_events con snapshot. Elegir un archivo nuevo.
+
+.\.venv\Scripts\python.exe main.py --input-v3 source\v3_exports\run_0f33dcf80937.jsonl
+Llevar Mongo exportado a las zonas. Su benchmark sigue siendo SQLite espejo.
+
+.\.venv\Scripts\python.exe -m scripts.benchmark_mongo_v3 --compose-dir "D:\ITM\20262\TAeBD\Taller 2\TrackAmazonas_Demo_V3" --run-id 0f33dcf80937
+Medir Mongo real vs su Gold y guardar benchmark_mongo_real.json.
+
+7. GITHUB
+Ver README para publicar repositorio con la cuenta del equipo.
+Reemplazar URL_DEL_REPOSITORIO_DEL_EQUIPO por el URL real.
+
+8. FINALIZAR
+main.py cierra las conexiones al terminar; la base no deja servicios abiertos.
+Cerrar PowerShell no modifica bases V3.
+
+9. REPORTE HTML Y NUEVAS CONSULTAS
+$estadoLake = Get-Content lakehouse\current.json -Raw | ConvertFrom-Json
+$reporteLake = Join-Path (Get-Location) (Join-Path $estadoLake.evidence 'reporte.html')
+Start-Process $reporteLake
+Abrir resumen, calidad, ocho consultas, benchmark e historia SCD.
+--query 7 muestra el resumen horario ponderado; --query 8 los retrasos por ruta.
+
+10. DELTA EXPERIMENTAL NO VALIDADO LOCALMENTE
+.\.venv\Scripts\python.exe -m pip install -r requirements-delta.txt
+.\.venv\Scripts\python.exe -m scripts.delta_demo --sample-size 1000
+La prueba local encontró un error de renombrado/permisos. No es requisito de main.
+Solo afirmar que funciona si genera evidence_delta.json con PASS en su equipo.

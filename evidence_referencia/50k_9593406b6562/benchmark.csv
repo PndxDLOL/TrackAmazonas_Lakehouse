@@ -1,0 +1,4 @@
+comparison,left_median_ms,right_median_ms,ratio,equal_results
+SQLite fuente vs DuckDB Gold,282.18679999554297,57.630600000265986,4.896475136372701,True
+Opt 1 Parquet monolítico vs particionado,15.493599996261764,26.474700003745966,0.5852228729341424,True
+Opt 2 detalle estrella vs agregado mensual,84.87849999801256,26.172800004133023,3.243004186965443,True

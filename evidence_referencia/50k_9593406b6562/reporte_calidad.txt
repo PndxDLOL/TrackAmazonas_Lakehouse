@@ -1,0 +1,14 @@
+REPORTE DE CALIDAD SILVER
+Bronze: 50550
+Silver: 49698
+Descartes auditados: 852
+Retención: 98.3145%
+DUPLICATE_RETRY: 497
+IDENTITY_CONFLICT: 100
+INVALID_COORDINATES: 85
+INVALID_TIME: 85
+MISSING_ID: 85
+Velocidades sin medición: 150
+Rango temporal: 2026-01-01 00:00:00 a 2026-03-31 00:05:29
+Velocidad media de mediciones válidas: 15.207751332041608
+Conciliación Bronze = Silver + descartes: PASS

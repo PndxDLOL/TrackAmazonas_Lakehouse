@@ -1,0 +1,29 @@
+{
+  "source": "ZIP aportado por el equipo; auditoría sin ejecutar sus scripts",
+  "bronze_rows": 20200,
+  "gold_rows": 19964,
+  "vessel_versions": 800,
+  "vessels": 800,
+  "scd_changed_vessels": 0,
+  "scd_temporal_join_in_code": false,
+  "benchmark_same_population": false,
+  "bronze_river_counts": {
+    "Amazonas": 8990,
+    "Caqueta": 5129,
+    "Putumayo": 6081
+  },
+  "gold_river_counts": {
+    "1": 8881,
+    "2": 5078,
+    "3": 6005
+  },
+  "bronze_full_scan_glob": true,
+  "delta_log_versions": [
+    0
+  ],
+  "extra_fields_not_in_v3": [
+    "heading",
+    "signal_quality"
+  ],
+  "validation_scope": "El PASS incluido comprueba unicidad/coordenadas/archivos; no compara resultados del benchmark ni demuestra cambios SCD"
+}

@@ -1,0 +1,26 @@
+TRACKAMAZONAS - TALLER 3 - EQUIPO 4 - CONSOLIDACIÓN V2
+
+1. El informe de 15 páginas compara las propuestas, justifica decisiones y analiza resultados.
+2. La guía de 9 páginas contiene instalación, recorrido, consultas, exposición y defensa.
+3. El proyecto ejecutable está en TrackAmazonas_Lakehouse_V2; abrir README.md.
+4. Desde esa carpeta: crear .venv, instalar requirements.txt y ejecutar main.py.
+5. COMANDOS.txt describe cada comando. La base no requiere Docker.
+6. evidence_referencia conserva dos corridas previas, identificadas por execution_id.
+   Sus reportes HTML pueden abrirse sin instalar Python. No son una corrida nueva.
+7. Los grandes archivos SQLite y Parquet no se incluyen: se regeneran con main.py.
+
+CAMBIOS PRINCIPALES
+SCD2 con 80 cambios reales en el catálogo sintético y lookup por event_time;
+ocho consultas; mart horario con medias ponderadas; benchmark con la misma
+población; Bronze por snapshot; documentación alineada con la implementación.
+
+VALIDACIÓN Y PENDIENTES
+7 pruebas base aprobadas y 1 prueba Delta opcional omitida. Ensayo de 500.000
+originales: 505.500 Bronze, 496.989 hechos válidos y 8.000 filas horarias.
+No se atribuyen estos datos académicos a navegación real.
+Delta es experimental: la escritura local dio un error de permisos/renombrado.
+La integración Docker y benchmark Mongo necesitan validarse con la V3 activa.
+La estructura y sintaxis HTML/JS se comprobaron; falta ensayo en navegador.
+Publicar GitHub con la cuenta del equipo y verificar desde un clon limpio.
+
+Los originales aportados y la solución V1 permanecen sin modificaciones.

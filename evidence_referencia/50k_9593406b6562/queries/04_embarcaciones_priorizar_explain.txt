@@ -1,0 +1,137 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Q4. Lista para revisión; no atribuye infracciones ni cuenta incidentes. SELECT v.vessel_id,count(*) AS muestras,sum(f.anomaly_sample) AS muestras_anomalas,  round(100.0*sum(f.anomaly_sample)/count(*),3) AS anomalia_pct,  round(quantile_cont(f.ingestion_delay_s,.95),3) AS retraso_p95_s FROM fact_telemetria f JOIN dim_embarcacion v ON f.vessel_sk=v.vessel_sk GROUP BY v.vessel_id HAVING count(*)>=20 ORDER BY anomalia_pct DESC,muestras DESC,v.vessel_id LIMIT 10; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0424s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           TOP_N           │
+│    ────────────────────   │
+│          Top: 10          │
+│                           │
+│         Order By:         │
+│   round(((100.0 * sum(f   │
+│    .anomaly_sample)) /    │
+│   count_star()), 3) DESC  │
+│     count_star() DESC     │
+│      v.vessel_id ASC      │
+│                           │
+│                           │
+│                           │
+│          10 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         vessel_id         │
+│          muestras         │
+│     muestras_anomalas     │
+│        anomalia_pct       │
+│       retraso_p95_s       │
+│                           │
+│                           │
+│                           │
+│          800 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│           FILTER          │
+│    ────────────────────   │
+│    (count_star() >= 20)   │
+│                           │
+│                           │
+│                           │
+│          800 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│          sum(#1)          │
+│     quantile_cont(#2)     │
+│                           │
+│                           │
+│                           │
+│          800 rows         │
+│           0.01s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         vessel_id         │
+│       anomaly_sample      │
+│     ingestion_delay_s     │
+│                           │
+│                           │
+│                           │
+│        49,698 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│   vessel_sk = vessel_sk   ├──────────────┐
+│                           │              │
+│                           │              │
+│                           │              │
+│        49,698 rows        │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│         vessel_sk         ││         vessel_sk         │
+│     ingestion_delay_s     ││         vessel_id         │
+│       anomaly_sample      ││                           │
+│                           ││    Total Files Read: 1    │
+│      Dynamic Filters:     ││                           │
+│    optional: vessel_sk>   ││        Filename(s):       │
+│   =1316721700854587 AND   ││ C:/Users/Juan David/.codex│
+│    optional: vessel_sk<   ││ /visualizations/2026/09/03│
+│    =1152626425294384904   ││  /01a067d3-fd1c-74b0-aaa2 │
+│                           ││       -6d1bb97178e3       │
+│    Total Files Read: 3    ││   /taller3_lakehouse_v2   │
+│                           ││      /lakehouse/gold      │
+│        Filename(s):       ││/3ba122bff35036803914_95934│
+│ C:/Users/Juan David/.codex││  06b6562/dim_embarcacion  │
+│ /visualizations/2026/09/03││          .parquet         │
+│  /01a067d3-fd1c-74b0-aaa2 ││                           │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││                           │
+│      /lakehouse/gold      ││                           │
+│/3ba122bff35036803914_95934││           0.00s           │
+│ 06b6562/fact_telemetria/**││                           │
+│         /*.parquet        ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        49,698 rows        ││          880 rows         │
+│           0.01s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

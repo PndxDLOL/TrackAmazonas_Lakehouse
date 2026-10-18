@@ -1,0 +1,12 @@
+{
+  "checks": {
+    "five_tabs": true,
+    "eight_queries": true,
+    "eight_csv_links": true,
+    "no_autorefresh": true,
+    "local_resources_only": true
+  },
+  "status": "PASS_STATIC_CHECKS",
+  "browser_status": "NOT_VALIDATED_BROWSER_LAUNCH_FAILED",
+  "scope": "Generated HTML structure and resource checks; not a native-browser interaction test."
+}

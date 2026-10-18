@@ -1,0 +1,10 @@
+rio,anio,mes,muestras,muestras_anomalas,tasa_anomalia_pct,velocidad_media_kmh
+Amazonas,2026,1,6901,638.0,9.245,15.116
+Caqueta,2026,1,6871,199.0,2.896,15.232
+Putumayo,2026,1,6902,335.0,4.854,15.389
+Amazonas,2026,2,3451,320.0,9.273,15.221
+Caqueta,2026,2,3435,101.0,2.94,15.216
+Putumayo,2026,2,3451,165.0,4.781,15.169
+Amazonas,2026,3,6239,563.0,9.024,15.086
+Caqueta,2026,3,6212,191.0,3.075,15.249
+Putumayo,2026,3,6236,314.0,5.035,15.172

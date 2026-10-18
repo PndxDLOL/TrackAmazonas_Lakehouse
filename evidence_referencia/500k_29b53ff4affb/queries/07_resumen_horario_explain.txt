@@ -1,0 +1,162 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Sumar numeradores y denominadores; no promediar medias de grupos desiguales. SELECT r.river_name AS rio,   count(DISTINCT (v.vessel_id,h.hour_utc)) AS horas_embarcacion_observadas,   count(*) AS filas_del_mart,   sum(h.event_count) AS muestras,   round(sum(h.speed_sum)/nullif(sum(h.speed_count),0),3) AS velocidad_media_ponderada,   round(100.0*sum(h.late_samples)/sum(h.event_count),3) AS tardias_pct FROM agg_embarcacion_hora h JOIN dim_rio r USING(river_sk) JOIN dim_embarcacion v USING(vessel_sk) GROUP BY r.river_name ORDER BY r.river_name; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0368s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│      r.river_name ASC     │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            rio            │
+│horas_embarcacion_observada│
+│             s             │
+│       filas_del_mart      │
+│          muestras         │
+│ velocidad_media_ponderada │
+│        tardias_pct        │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│     count(DISTINCT #1)    │
+│        count_star()       │
+│          sum(#2)          │
+│          sum(#3)          │
+│          sum(#4)          │
+│          sum(#5)          │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         river_name        │
+│ "row"(vessel_id, hour_utc)│
+│        event_count        │
+│         speed_sum         │
+│        speed_count        │
+│        late_samples       │
+│                           │
+│                           │
+│                           │
+│         8,000 rows        │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│   vessel_sk = vessel_sk   ├───────────────────────────────────────────┐
+│                           │                                           │
+│                           │                                           │
+│                           │                                           │
+│         8,000 rows        │                                           │
+│           0.00s           │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │         TABLE_SCAN        │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: INNER     │                             │         Function:         │
+│                           │                             │        READ_PARQUET       │
+│        Conditions:        │                             │                           │
+│    river_sk = river_sk    │                             │        Projections:       │
+│                           │                             │         vessel_sk         │
+│                           │                             │         vessel_id         │
+│                           │                             │                           │
+│                           │                             │    Total Files Read: 1    │
+│           0.00s           │                             │                           │
+│                           │                             │        Filename(s):       │
+│                           │                             │ C:/Users/Juan David/.codex│
+│                           ├──────────────┐              │ /visualizations/2026/09/03│
+│                           │              │              │  /01a067d3-fd1c-74b0-aaa2 │
+│                           │              │              │       -6d1bb97178e3       │
+│                           │              │              │   /taller3_lakehouse_v2   │
+│                           │              │              │      /lakehouse/gold      │
+│                           │              │              │/94be1ccb39cef7900103_29b53│
+│                           │              │              │  ff4affb/dim_embarcacion  │
+│                           │              │              │          .parquet         │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│         8,000 rows        │              │              │          880 rows         │
+│          (0.00s)          │              │              │           0.00s           │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          hour_utc         ││          river_sk         │
+│         vessel_sk         ││         river_name        │
+│          river_sk         ││                           │
+│        event_count        ││    Total Files Read: 1    │
+│        late_samples       ││                           │
+│         speed_sum         ││        Filename(s):       │
+│        speed_count        ││ C:/Users/Juan David/.codex│
+│                           ││ /visualizations/2026/09/03│
+│      Dynamic Filters:     ││  /01a067d3-fd1c-74b0-aaa2 │
+│    optional: vessel_sk>   ││       -6d1bb97178e3       │
+│   =1316721700854587 AND   ││   /taller3_lakehouse_v2   │
+│    optional: vessel_sk<   ││      /lakehouse/gold      │
+│    =1152626425294384904   ││/94be1ccb39cef7900103_29b53│
+│ optional: river_sk>=1 AND ││  ff4affb/dim_rio.parquet  │
+│    optional: river_sk<=3  ││                           │
+│                           ││                           │
+│    Total Files Read: 1    ││                           │
+│                           ││                           │
+│        Filename(s):       ││           0.00s           │
+│ C:/Users/Juan David/.codex││                           │
+│ /visualizations/2026/09/03││                           │
+│  /01a067d3-fd1c-74b0-aaa2 ││                           │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││                           │
+│      /lakehouse/gold      ││                           │
+│/94be1ccb39cef7900103_29b53││                           │
+│ff4affb/agg_embarcacion_hor││                           │
+│         a.parquet         ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│         8,000 rows        ││           3 rows          │
+│           0.00s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

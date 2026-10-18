@@ -1,0 +1,22 @@
+{
+  "bronze_rows": 50550,
+  "silver_rows": 49698,
+  "discarded_rows": 852,
+  "retained_pct": 98.3145,
+  "reasons": {
+    "INVALID_TIME": 85,
+    "INVALID_COORDINATES": 85,
+    "MISSING_ID": 85,
+    "IDENTITY_CONFLICT": 100,
+    "DUPLICATE_RETRY": 497
+  },
+  "conservation_pass": true,
+  "event_time_min": "2026-01-01 00:00:00",
+  "event_time_max": "2026-03-31 00:05:29",
+  "vessels": 800,
+  "missing_speed_rows": 150,
+  "speed_min": 0.0,
+  "speed_max": 24.0,
+  "speed_avg": 15.207751332041608,
+  "policy": "Velocidad ausente permanece NULL; conflictos válidos excluyen todas sus versiones; retrasos se conservan."
+}

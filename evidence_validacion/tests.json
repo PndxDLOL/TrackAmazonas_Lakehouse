@@ -1,0 +1,10 @@
+{
+  "tests_run": 8,
+  "passed": 7,
+  "skipped": 1,
+  "failed": 0,
+  "errors": 0,
+  "delta_status": "NOT_VALIDATED_LOCAL_IO_ERROR",
+  "delta_error": "Unable to rename file: Acceso denegado os error 5",
+  "note": "Prueba opcional Delta requiere RUN_DELTA=1; el n\u00facleo no la necesita"
+}

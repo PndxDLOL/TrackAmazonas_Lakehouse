@@ -1,0 +1,3 @@
+vessel_id,operator_name,service_class,valid_from,valid_to,muestras,velocidad_media_kmh
+TA-001,Operador A,REGULAR,2026-01-01,2026-02-15,373,14.98
+TA-001,Operador B,PRIORITARIA,2026-02-15,,248,15.124

@@ -1,0 +1,34 @@
+{
+  "01_muestras_rio_mes": {
+    "rows": 9,
+    "elapsed_ms": 277.249
+  },
+  "02_retraso_llegada": {
+    "rows": 3,
+    "elapsed_ms": 182.384
+  },
+  "03_comparacion_rutas": {
+    "rows": 3,
+    "elapsed_ms": 174.841
+  },
+  "04_embarcaciones_priorizar": {
+    "rows": 10,
+    "elapsed_ms": 191.73
+  },
+  "05_historia_scd": {
+    "rows": 2,
+    "elapsed_ms": 167.65
+  },
+  "06_tardios_por_fecha": {
+    "rows": 5,
+    "elapsed_ms": 140.741
+  },
+  "07_resumen_horario": {
+    "rows": 3,
+    "elapsed_ms": 37.117
+  },
+  "08_retrasos_por_ruta": {
+    "rows": 3,
+    "elapsed_ms": 485.294
+  }
+}

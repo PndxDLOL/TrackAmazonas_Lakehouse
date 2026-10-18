@@ -1,0 +1,151 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Q6. El día corresponde a la captura, aunque se recibiera después. SELECT t.fecha,count(*) AS muestras,sum(f.late_sample) AS muestras_tardias,  round(100.0*sum(f.late_sample)/count(*),3) AS tardias_pct,  count(DISTINCT v.vessel_id) AS embarcaciones_observadas FROM fact_telemetria f JOIN dim_tiempo t ON f.date_sk=t.date_sk JOIN dim_embarcacion v ON f.vessel_sk=v.vessel_sk GROUP BY t.fecha ORDER BY t.fecha; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.155s              ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│        t.fecha ASC        │
+│                           │
+│                           │
+│                           │
+│           5 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│           fecha           │
+│          muestras         │
+│      muestras_tardias     │
+│        tardias_pct        │
+│  embarcaciones_observadas │
+│                           │
+│                           │
+│                           │
+│           5 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│          sum(#1)          │
+│     count(DISTINCT #2)    │
+│                           │
+│                           │
+│                           │
+│           5 rows          │
+│           0.04s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│           fecha           │
+│        late_sample        │
+│         vessel_id         │
+│                           │
+│                           │
+│                           │
+│        496,989 rows       │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│   vessel_sk = vessel_sk   ├───────────────────────────────────────────┐
+│                           │                                           │
+│                           │                                           │
+│                           │                                           │
+│        496,989 rows       │                                           │
+│           0.03s           │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │         TABLE_SCAN        │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: INNER     │                             │         Function:         │
+│                           │                             │        READ_PARQUET       │
+│        Conditions:        │                             │                           │
+│     date_sk = date_sk     │                             │        Projections:       │
+│                           │                             │         vessel_sk         │
+│                           │                             │         vessel_id         │
+│                           │                             │                           │
+│                           │                             │    Total Files Read: 1    │
+│           0.01s           │                             │                           │
+│                           │                             │        Filename(s):       │
+│                           │                             │ C:/Users/Juan David/.codex│
+│                           ├──────────────┐              │ /visualizations/2026/09/03│
+│                           │              │              │  /01a067d3-fd1c-74b0-aaa2 │
+│                           │              │              │       -6d1bb97178e3       │
+│                           │              │              │   /taller3_lakehouse_v2   │
+│                           │              │              │      /lakehouse/gold      │
+│                           │              │              │/94be1ccb39cef7900103_29b53│
+│                           │              │              │  ff4affb/dim_embarcacion  │
+│                           │              │              │          .parquet         │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│        496,989 rows       │              │              │          880 rows         │
+│          (0.01s)          │              │              │           0.00s           │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          date_sk          ││          date_sk          │
+│         vessel_sk         ││           fecha           │
+│        late_sample        ││                           │
+│                           ││    Total Files Read: 1    │
+│      Dynamic Filters:     ││                           │
+│     optional: date_sk>    ││        Filename(s):       │
+│  =20260101 AND optional:  ││ C:/Users/Juan David/.codex│
+│      date_sk<=20260331    ││ /visualizations/2026/09/03│
+│    optional: vessel_sk>   ││  /01a067d3-fd1c-74b0-aaa2 │
+│   =1316721700854587 AND   ││       -6d1bb97178e3       │
+│    optional: vessel_sk<   ││   /taller3_lakehouse_v2   │
+│    =1152626425294384904   ││      /lakehouse/gold      │
+│                           ││/94be1ccb39cef7900103_29b53│
+│    Total Files Read: 3    ││ ff4affb/dim_tiempo.parquet│
+│                           ││                           │
+│        Filename(s):       ││                           │
+│ C:/Users/Juan David/.codex││                           │
+│ /visualizations/2026/09/03││                           │
+│  /01a067d3-fd1c-74b0-aaa2 ││           0.00s           │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││                           │
+│      /lakehouse/gold      ││                           │
+│/94be1ccb39cef7900103_29b53││                           │
+│ ff4affb/fact_telemetria/**││                           │
+│         /*.parquet        ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        496,989 rows       ││          90 rows          │
+│           0.03s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

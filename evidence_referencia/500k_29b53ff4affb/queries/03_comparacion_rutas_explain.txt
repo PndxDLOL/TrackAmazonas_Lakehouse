@@ -1,0 +1,156 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Q3. Rendimiento de rutas; AVG excluye nulos y se muestra su cobertura. SELECT rt.route_id,r.river_name AS rio,count(*) AS muestras,  count(f.speed_kmh) AS velocidades_validas,  round(avg(f.speed_kmh),3) AS velocidad_media_kmh,  round(100.0*sum(f.anomaly_sample)/count(*),3) AS anomalia_pct FROM fact_telemetria f JOIN dim_ruta rt ON f.route_sk=rt.route_sk JOIN dim_rio r ON f.river_sk=r.river_sk GROUP BY rt.route_id,r.river_name ORDER BY anomalia_pct DESC; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.173s              ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│   round(((100.0 * sum(f   │
+│    .anomaly_sample)) /    │
+│   count_star()), 3) DESC  │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│          route_id         │
+│            rio            │
+│          muestras         │
+│    velocidades_validas    │
+│    velocidad_media_kmh    │
+│        anomalia_pct       │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│         count(#2)         │
+│          avg(#3)          │
+│          sum(#4)          │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.04s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│          route_id         │
+│         river_name        │
+│         speed_kmh         │
+│         speed_kmh         │
+│       anomaly_sample      │
+│                           │
+│                           │
+│                           │
+│        496,989 rows       │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│    river_sk = river_sk    ├───────────────────────────────────────────┐
+│                           │                                           │
+│                           │                                           │
+│                           │                                           │
+│        496,989 rows       │                                           │
+│           0.02s           │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │         TABLE_SCAN        │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: INNER     │                             │         Function:         │
+│                           │                             │        READ_PARQUET       │
+│        Conditions:        │                             │                           │
+│    route_sk = route_sk    │                             │        Projections:       │
+│                           │                             │          river_sk         │
+│                           │                             │         river_name        │
+│                           │                             │                           │
+│                           │                             │    Total Files Read: 1    │
+│           0.02s           │                             │                           │
+│                           │                             │        Filename(s):       │
+│                           ├──────────────┐              │ C:/Users/Juan David/.codex│
+│                           │              │              │ /visualizations/2026/09/03│
+│                           │              │              │  /01a067d3-fd1c-74b0-aaa2 │
+│                           │              │              │       -6d1bb97178e3       │
+│                           │              │              │   /taller3_lakehouse_v2   │
+│                           │              │              │      /lakehouse/gold      │
+│                           │              │              │/94be1ccb39cef7900103_29b53│
+│                           │              │              │  ff4affb/dim_rio.parquet  │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│        496,989 rows       │              │              │           3 rows          │
+│          (0.02s)          │              │              │           0.00s           │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          river_sk         ││          route_sk         │
+│          route_sk         ││          route_id         │
+│         speed_kmh         ││                           │
+│       anomaly_sample      ││    Total Files Read: 1    │
+│                           ││                           │
+│      Dynamic Filters:     ││        Filename(s):       │
+│ optional: river_sk>=1 AND ││ C:/Users/Juan David/.codex│
+│    optional: river_sk<=3  ││ /visualizations/2026/09/03│
+│ optional: route_sk>=1 AND ││  /01a067d3-fd1c-74b0-aaa2 │
+│    optional: route_sk<=3  ││       -6d1bb97178e3       │
+│                           ││   /taller3_lakehouse_v2   │
+│    Total Files Read: 3    ││      /lakehouse/gold      │
+│                           ││/94be1ccb39cef7900103_29b53│
+│        Filename(s):       ││  ff4affb/dim_ruta.parquet │
+│ C:/Users/Juan David/.codex││                           │
+│ /visualizations/2026/09/03││                           │
+│  /01a067d3-fd1c-74b0-aaa2 ││                           │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││           0.00s           │
+│      /lakehouse/gold      ││                           │
+│/94be1ccb39cef7900103_29b53││                           │
+│ ff4affb/fact_telemetria/**││                           │
+│         /*.parquet        ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        496,989 rows       ││           3 rows          │
+│           0.06s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

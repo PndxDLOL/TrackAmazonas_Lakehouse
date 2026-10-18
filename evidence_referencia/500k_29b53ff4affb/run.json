@@ -1,0 +1,212 @@
+{
+  "execution_id": "29b53ff4affb",
+  "batch_id": "94be1ccb39cef7900103",
+  "reused": false,
+  "duration_s": 150.918,
+  "result": "PASS",
+  "quality": {
+    "bronze_rows": 505500,
+    "silver_rows": 496989,
+    "discarded_rows": 8511,
+    "retained_pct": 98.3163,
+    "reasons": {
+      "INVALID_TIME": 847,
+      "INVALID_COORDINATES": 848,
+      "MISSING_ID": 845,
+      "IDENTITY_CONFLICT": 996,
+      "DUPLICATE_RETRY": 4975
+    },
+    "conservation_pass": true,
+    "event_time_min": "2026-01-01 00:00:00",
+    "event_time_max": "2026-03-31 01:02:29",
+    "vessels": 800,
+    "missing_speed_rows": 1493,
+    "speed_min": 0.0,
+    "speed_max": 24.0,
+    "speed_avg": 15.20032826702922,
+    "policy": "Velocidad ausente permanece NULL; conflictos válidos excluyen todas sus versiones; retrasos se conservan."
+  },
+  "validation": {
+    "fact_rows": 496989,
+    "unique_events": 496989,
+    "vessel_versions": 880,
+    "vessels": 800,
+    "scd_changed_vessels": 80,
+    "lookup_exactly_one": true,
+    "scd_current_unique": true,
+    "foreign_keys_pass": true,
+    "scd_interval_policy": "[valid_from, valid_to); NULL representa fin abierto",
+    "fact_grain": "Una fila por event_id válido de telemetría",
+    "aggregate_grain": "Una fila por año, mes y río",
+    "hourly_rows": 8000,
+    "hourly_count_reconciled": true,
+    "hourly_grain": "Una fila por hora UTC, versión de embarcación, río y ruta"
+  },
+  "benchmark": {
+    "comparisons": [
+      {
+        "label": "SQLite fuente vs DuckDB Gold",
+        "equal_results": true,
+        "left_ms": [
+          3525.8955000026617,
+          2509.201700006088,
+          2334.428999994998,
+          3775.395299999218,
+          4522.954199994274,
+          3407.1308999991743,
+          2809.3011000019033,
+          6272.043400000257,
+          5112.514600004943
+        ],
+        "right_ms": [
+          243.06009999418166,
+          185.94049999956042,
+          70.03590000385884,
+          66.26549999782583,
+          122.23309999535559,
+          89.56849999958649,
+          264.1912999970373,
+          364.24990000523394,
+          122.47750000096858
+        ],
+        "left_median_ms": 3525.8955000026617,
+        "right_median_ms": 122.47750000096858,
+        "left_min_ms": 2334.428999994998,
+        "right_min_ms": 66.26549999782583,
+        "ratio_left_over_right": 28.78810801963445,
+        "result_rows": 9,
+        "repeats": 9,
+        "cache": "warm",
+        "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+      },
+      {
+        "label": "Opt 1 Parquet monolítico vs particionado",
+        "equal_results": true,
+        "left_ms": [
+          14.538399998855311,
+          11.112599997431971,
+          10.704600004828535,
+          14.536599999701139,
+          10.883200004172977,
+          10.806199999933597,
+          10.253399996145163,
+          9.40719999925932,
+          10.041599998658057
+        ],
+        "right_ms": [
+          19.913299998734146,
+          17.04059999610763,
+          13.329399997019209,
+          15.946699997584801,
+          14.781300000322517,
+          15.979299998434726,
+          15.157699999690522,
+          13.445999997202307,
+          11.71460000477964
+        ],
+        "left_median_ms": 10.806199999933597,
+        "right_median_ms": 15.157699999690522,
+        "left_min_ms": 9.40719999925932,
+        "right_min_ms": 11.71460000477964,
+        "ratio_left_over_right": 0.7129181868063248,
+        "result_rows": 1,
+        "repeats": 9,
+        "cache": "warm",
+        "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+      },
+      {
+        "label": "Opt 2 detalle estrella vs agregado mensual",
+        "equal_results": true,
+        "left_ms": [
+          84.35780000581872,
+          85.76570000150241,
+          124.33720000262838,
+          140.4818000009982,
+          117.59949999395758,
+          91.1203000068781,
+          89.39300000201911,
+          85.88029999373248,
+          84.73019999655662
+        ],
+        "right_ms": [
+          11.419700000260491,
+          10.572400002274662,
+          15.862500004004687,
+          16.40179999958491,
+          12.406099995132536,
+          10.880699999688659,
+          9.756300001754425,
+          9.750499993970152,
+          11.238099999900442
+        ],
+        "left_median_ms": 89.39300000201911,
+        "right_median_ms": 11.238099999900442,
+        "left_min_ms": 84.35780000581872,
+        "right_min_ms": 9.750499993970152,
+        "ratio_left_over_right": 7.954458494123655,
+        "result_rows": 9,
+        "repeats": 9,
+        "cache": "warm",
+        "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+      }
+    ],
+    "environment": {
+      "os": "Windows 11",
+      "python": "3.12.14",
+      "machine": "AMD64",
+      "duckdb": "1.5.6",
+      "pandas": "3.0.1",
+      "pyarrow": "26.0.0",
+      "sqlite": "3.53.1",
+      "duckdb_threads": 1
+    },
+    "source_profile": "academic_sqlite",
+    "fact_rows": 496989,
+    "month_filter": {
+      "year": 2026,
+      "month": 2
+    },
+    "methodology": "Comparación académica local: tipos convertidos y validación por IDs en SQLite; métricas preparadas en Gold. No aísla solo el formato columnar.",
+    "mongo_measured": false
+  },
+  "source_metadata": {
+    "profile": "academic_sqlite",
+    "rows_requested": 500000,
+    "seed": 42,
+    "synthetic": true,
+    "dataset_version": "2.0.0",
+    "description": "Ráfagas GPS cada 30 s en cinco ventanas de 800 barcos dentro de 90 días; no es captura continua."
+  },
+  "gold": "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb",
+  "silver": "lakehouse\\silver\\94be1ccb39cef7900103_29b53ff4affb",
+  "bronze": "lakehouse\\bronze\\94be1ccb39cef7900103",
+  "snapshot_hashes": {
+    "lakehouse\\silver\\94be1ccb39cef7900103_29b53ff4affb\\position_events.parquet": "1dafb0c39bbd312ab15a033068c23bb6457f59ed8a8f20e5cf64dbe46fe2faf8",
+    "lakehouse\\silver\\94be1ccb39cef7900103_29b53ff4affb\\quality.json": "452a129dd6c3c4cd90d01b1dba1206013cfa6a8349e3cf8cc6e5627d0f8f5c88",
+    "lakehouse\\silver\\94be1ccb39cef7900103_29b53ff4affb\\quarantine.parquet": "97a3d32a85b3ff4f11f1de9edee7b72a11f3e48a3150d0cbae933bdb4b4f3934",
+    "lakehouse\\silver\\94be1ccb39cef7900103_29b53ff4affb\\reporte_calidad.txt": "7b9bf598e162a81abea14389b69d23f58267ecf8ec07487691af6cce9d74d810",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\agg_embarcacion_hora.parquet": "0d942cf4af69a862210e10fc8975ff5fb1c2cd12cb1905446abc604978b960ef",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\agg_rio_mes.parquet": "20374467ca82bd92e7f1b54c3e48d84aff4ce9ea2ab33f3f23e42ad684f30f5d",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\dim_embarcacion.parquet": "c3e84e2ac33c02cfd2da548e7912918b23ebb1da3c2ff913a4c8d3840b5a77b2",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\dim_rio.parquet": "535c7092fb7b63d8561bbf694f80d5362230b6036e72a0e2096f217be44479ce",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\dim_ruta.parquet": "e8a89dc1bd4e5309876dc6140df873559130f49b23e8238b100102b74ae76e4b",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\dim_tiempo.parquet": "c17a3a2ffbd0ef8edd0ef4521cf06e7cb45c4da7eb13fe45c65aab0bcf4de40b",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\fact_unpartitioned.parquet": "d7e335e73565c67fc648a8938467c70746ac09293a9467e714b825f7bf8e8728",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\scd_demo.csv": "ffc3379feaeb2e0240cf6526fb656d43c65cc1b23331fa992d5bfb87167266b8",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\validation.json": "03765251f98ddb117d4c013adb938dbcca498fc3c91dc18dc4076c71cb50bfcb",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\fact_telemetria\\year=2026\\month=1\\data_0.parquet": "9d8ab93b7cab54c989d1403ba26694cb805cf2f607642fb7fb9a0a55545d7205",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\fact_telemetria\\year=2026\\month=2\\data_0.parquet": "1555d5b0e15806cf356e2efa95bf67ac2a38af9d2c1134b3879c073afdc26683",
+    "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb\\fact_telemetria\\year=2026\\month=3\\data_0.parquet": "a0e82ef915dd644ebe4c152a73bd35ce38d0896b58e2b93d10b3ea257b0eed7b"
+  },
+  "queries": [
+    "01_muestras_rio_mes",
+    "02_retraso_llegada",
+    "03_comparacion_rutas",
+    "04_embarcaciones_priorizar",
+    "05_historia_scd",
+    "06_tardios_por_fecha",
+    "07_resumen_horario",
+    "08_retrasos_por_ruta"
+  ],
+  "created_at": "2026-10-18T15:10:18.796684+00:00"
+}

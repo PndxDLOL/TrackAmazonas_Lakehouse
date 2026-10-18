@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pipeline.lock
+source/*.sqlite
+source/*.sqlite-*
+source/v3_exports/
+lakehouse/bronze/
+lakehouse/silver/
+lakehouse/gold/
+lakehouse/delta_demo/
+lakehouse/builds/
+lakehouse/current.json
+evidence/
+!evidence_referencia/

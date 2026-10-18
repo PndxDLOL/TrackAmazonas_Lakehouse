@@ -1,0 +1,127 @@
+{
+  "comparisons": [
+    {
+      "label": "SQLite fuente vs DuckDB Gold",
+      "equal_results": true,
+      "left_ms": [
+        3525.8955000026617,
+        2509.201700006088,
+        2334.428999994998,
+        3775.395299999218,
+        4522.954199994274,
+        3407.1308999991743,
+        2809.3011000019033,
+        6272.043400000257,
+        5112.514600004943
+      ],
+      "right_ms": [
+        243.06009999418166,
+        185.94049999956042,
+        70.03590000385884,
+        66.26549999782583,
+        122.23309999535559,
+        89.56849999958649,
+        264.1912999970373,
+        364.24990000523394,
+        122.47750000096858
+      ],
+      "left_median_ms": 3525.8955000026617,
+      "right_median_ms": 122.47750000096858,
+      "left_min_ms": 2334.428999994998,
+      "right_min_ms": 66.26549999782583,
+      "ratio_left_over_right": 28.78810801963445,
+      "result_rows": 9,
+      "repeats": 9,
+      "cache": "warm",
+      "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+    },
+    {
+      "label": "Opt 1 Parquet monolítico vs particionado",
+      "equal_results": true,
+      "left_ms": [
+        14.538399998855311,
+        11.112599997431971,
+        10.704600004828535,
+        14.536599999701139,
+        10.883200004172977,
+        10.806199999933597,
+        10.253399996145163,
+        9.40719999925932,
+        10.041599998658057
+      ],
+      "right_ms": [
+        19.913299998734146,
+        17.04059999610763,
+        13.329399997019209,
+        15.946699997584801,
+        14.781300000322517,
+        15.979299998434726,
+        15.157699999690522,
+        13.445999997202307,
+        11.71460000477964
+      ],
+      "left_median_ms": 10.806199999933597,
+      "right_median_ms": 15.157699999690522,
+      "left_min_ms": 9.40719999925932,
+      "right_min_ms": 11.71460000477964,
+      "ratio_left_over_right": 0.7129181868063248,
+      "result_rows": 1,
+      "repeats": 9,
+      "cache": "warm",
+      "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+    },
+    {
+      "label": "Opt 2 detalle estrella vs agregado mensual",
+      "equal_results": true,
+      "left_ms": [
+        84.35780000581872,
+        85.76570000150241,
+        124.33720000262838,
+        140.4818000009982,
+        117.59949999395758,
+        91.1203000068781,
+        89.39300000201911,
+        85.88029999373248,
+        84.73019999655662
+      ],
+      "right_ms": [
+        11.419700000260491,
+        10.572400002274662,
+        15.862500004004687,
+        16.40179999958491,
+        12.406099995132536,
+        10.880699999688659,
+        9.756300001754425,
+        9.750499993970152,
+        11.238099999900442
+      ],
+      "left_median_ms": 89.39300000201911,
+      "right_median_ms": 11.238099999900442,
+      "left_min_ms": 84.35780000581872,
+      "right_min_ms": 9.750499993970152,
+      "ratio_left_over_right": 7.954458494123655,
+      "result_rows": 9,
+      "repeats": 9,
+      "cache": "warm",
+      "order": "alternado; conexiones abiertas; incluye fetchall; excluye ETL"
+    }
+  ],
+  "environment": {
+    "os": "Windows 11",
+    "python": "3.12.14",
+    "machine": "AMD64",
+    "duckdb": "1.5.6",
+    "pandas": "3.0.1",
+    "pyarrow": "26.0.0",
+    "sqlite": "3.53.1",
+    "duckdb_threads": 1
+  },
+  "source_profile": "academic_sqlite",
+  "fact_rows": 496989,
+  "month_filter": {
+    "year": 2026,
+    "month": 2
+  },
+  "methodology": "Comparación académica local: tipos convertidos y validación por IDs en SQLite; métricas preparadas en Gold. No aísla solo el formato columnar.",
+  "mongo_measured": false
+}

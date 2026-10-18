@@ -1,0 +1,202 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE  SELECT r.river_name AS rio,t.anio,t.mes,count(*) AS muestras,sum(f.anomaly_sample) AS anomalas FROM fact_telemetria f JOIN dim_tiempo t ON f.date_sk=t.date_sk JOIN dim_rio r ON f.river_sk=r.river_sk GROUP BY r.river_name,t.anio,t.mes ORDER BY t.anio,t.mes,rio 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.0806s             ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_decompress_integ│
+│   ral_integer(#1, 2026)   │
+│__internal_decompress_integ│
+│     ral_integer(#2, 1)    │
+│             #3            │
+│             #4            │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│         t.anio ASC        │
+│         t.mes ASC         │
+│      r.river_name ASC     │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_compress_integra│
+│    l_utinyint(#1, 2026)   │
+│__internal_compress_integra│
+│     l_utinyint(#2, 1)     │
+│             #3            │
+│             #4            │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_decompress_integ│
+│   ral_integer(#1, 2026)   │
+│__internal_decompress_integ│
+│     ral_integer(#2, 1)    │
+│             #3            │
+│             #4            │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│          sum(#3)          │
+│                           │
+│                           │
+│                           │
+│           9 rows          │
+│           0.02s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         river_name        │
+│            anio           │
+│            mes            │
+│       anomaly_sample      │
+│                           │
+│                           │
+│                           │
+│        496,989 rows       │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│             #0            │
+│__internal_compress_integra│
+│    l_utinyint(#1, 2026)   │
+│__internal_compress_integra│
+│     l_utinyint(#2, 1)     │
+│             #3            │
+│                           │
+│                           │
+│                           │
+│        496,989 rows       │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│    river_sk = river_sk    ├───────────────────────────────────────────┐
+│                           │                                           │
+│                           │                                           │
+│                           │                                           │
+│        496,989 rows       │                                           │
+│           0.01s           │                                           │
+└─────────────┬─────────────┘                                           │
+┌─────────────┴─────────────┐                             ┌─────────────┴─────────────┐
+│         HASH_JOIN         │                             │         TABLE_SCAN        │
+│    ────────────────────   │                             │    ────────────────────   │
+│      Join Type: INNER     │                             │         Function:         │
+│                           │                             │        READ_PARQUET       │
+│        Conditions:        │                             │                           │
+│     date_sk = date_sk     │                             │        Projections:       │
+│                           │                             │          river_sk         │
+│                           │                             │         river_name        │
+│                           │                             │                           │
+│                           │                             │    Total Files Read: 1    │
+│           0.00s           │                             │                           │
+│                           │                             │        Filename(s):       │
+│                           ├──────────────┐              │ C:/Users/Juan David/.codex│
+│                           │              │              │ /visualizations/2026/09/03│
+│                           │              │              │  /01a067d3-fd1c-74b0-aaa2 │
+│                           │              │              │       -6d1bb97178e3       │
+│                           │              │              │   /taller3_lakehouse_v2   │
+│                           │              │              │      /lakehouse/gold      │
+│                           │              │              │/94be1ccb39cef7900103_29b53│
+│                           │              │              │  ff4affb/dim_rio.parquet  │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│                           │              │              │                           │
+│        496,989 rows       │              │              │           3 rows          │
+│          (0.00s)          │              │              │           0.00s           │
+└─────────────┬─────────────┘              │              └───────────────────────────┘
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          date_sk          ││          date_sk          │
+│          river_sk         ││            anio           │
+│       anomaly_sample      ││            mes            │
+│                           ││                           │
+│      Dynamic Filters:     ││    Total Files Read: 1    │
+│     optional: date_sk>    ││                           │
+│  =20260101 AND optional:  ││        Filename(s):       │
+│      date_sk<=20260331    ││ C:/Users/Juan David/.codex│
+│ optional: river_sk>=1 AND ││ /visualizations/2026/09/03│
+│    optional: river_sk<=3  ││  /01a067d3-fd1c-74b0-aaa2 │
+│                           ││       -6d1bb97178e3       │
+│    Total Files Read: 3    ││   /taller3_lakehouse_v2   │
+│                           ││      /lakehouse/gold      │
+│        Filename(s):       ││/94be1ccb39cef7900103_29b53│
+│ C:/Users/Juan David/.codex││ ff4affb/dim_tiempo.parquet│
+│ /visualizations/2026/09/03││                           │
+│  /01a067d3-fd1c-74b0-aaa2 ││                           │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││                           │
+│      /lakehouse/gold      ││           0.00s           │
+│/94be1ccb39cef7900103_29b53││                           │
+│ ff4affb/fact_telemetria/**││                           │
+│         /*.parquet        ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        496,989 rows       ││          90 rows          │
+│           0.02s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

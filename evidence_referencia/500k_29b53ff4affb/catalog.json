@@ -1,0 +1,23 @@
+{
+  "owner": "Equipo 4 TrackAmazonas",
+  "classification": "Telemetría sintética o exportada; ubicaciones sensibles en producción",
+  "snapshot": "94be1ccb39cef7900103",
+  "grain": "Una fila por event_id válido de telemetría",
+  "layers": {
+    "bronze": "lakehouse\\bronze\\94be1ccb39cef7900103",
+    "silver": "lakehouse\\silver\\94be1ccb39cef7900103_29b53ff4affb",
+    "gold": "lakehouse\\gold\\94be1ccb39cef7900103_29b53ff4affb"
+  },
+  "lineage": [
+    "SQLite o Mongo V3 exportado",
+    "Bronze",
+    "Silver",
+    "Gold",
+    "DuckDB"
+  ],
+  "event_time": "Tiempo del GPS; gobierna partición, SCD y agrupaciones",
+  "ingestion_time": "Tiempo de recepción central; incluye posible atraso offline",
+  "retention": "Local sin borrado automático; política productiva por definir",
+  "delta_or_iceberg": false,
+  "concurrent_writers_supported": false
+}

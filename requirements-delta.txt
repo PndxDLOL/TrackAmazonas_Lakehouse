@@ -1,0 +1,2 @@
+# Profundización opcional. La base no importa esta biblioteca.
+deltalake==1.6.6

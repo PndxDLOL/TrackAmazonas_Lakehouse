@@ -1,0 +1,125 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Q2. Retraso captura-recepción, incluido backlog. No es solo latencia de red. SELECT r.river_name AS rio,count(*) AS muestras,   round(avg(f.ingestion_delay_s),3) AS retraso_medio_s,   round(quantile_cont(f.ingestion_delay_s,.95),3) AS retraso_p95_s,   round(quantile_cont(f.ingestion_delay_s,.99),3) AS retraso_p99_s,   round(100.0*sum(f.late_sample)/count(*),3) AS muestras_mayores_60s_pct FROM fact_telemetria f JOIN dim_rio r ON f.river_sk=r.river_sk GROUP BY r.river_name ORDER BY retraso_p95_s DESC; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.153s              ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│   round(quantile_cont(f   │
+│ .ingestion_delay_s, .95), │
+│           3) DESC         │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│            rio            │
+│          muestras         │
+│      retraso_medio_s      │
+│       retraso_p95_s       │
+│       retraso_p99_s       │
+│  muestras_mayores_60s_pct │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│         Groups: #0        │
+│                           │
+│        Aggregates:        │
+│        count_star()       │
+│          avg(#1)          │
+│     quantile_cont(#2)     │
+│     quantile_cont(#3)     │
+│          sum(#4)          │
+│                           │
+│                           │
+│                           │
+│           3 rows          │
+│           0.07s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         river_name        │
+│     ingestion_delay_s     │
+│     ingestion_delay_s     │
+│     ingestion_delay_s     │
+│        late_sample        │
+│                           │
+│                           │
+│                           │
+│        496,989 rows       │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: INNER     │
+│                           │
+│        Conditions:        │
+│    river_sk = river_sk    ├──────────────┐
+│                           │              │
+│                           │              │
+│                           │              │
+│        496,989 rows       │              │
+│           0.02s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          river_sk         ││          river_sk         │
+│     ingestion_delay_s     ││         river_name        │
+│        late_sample        ││                           │
+│                           ││    Total Files Read: 1    │
+│      Dynamic Filters:     ││                           │
+│ optional: river_sk>=1 AND ││        Filename(s):       │
+│    optional: river_sk<=3  ││ C:/Users/Juan David/.codex│
+│                           ││ /visualizations/2026/09/03│
+│    Total Files Read: 3    ││  /01a067d3-fd1c-74b0-aaa2 │
+│                           ││       -6d1bb97178e3       │
+│        Filename(s):       ││   /taller3_lakehouse_v2   │
+│ C:/Users/Juan David/.codex││      /lakehouse/gold      │
+│ /visualizations/2026/09/03││/94be1ccb39cef7900103_29b53│
+│  /01a067d3-fd1c-74b0-aaa2 ││  ff4affb/dim_rio.parquet  │
+│       -6d1bb97178e3       ││                           │
+│   /taller3_lakehouse_v2   ││                           │
+│      /lakehouse/gold      ││                           │
+│/94be1ccb39cef7900103_29b53││                           │
+│ ff4affb/fact_telemetria/**││           0.00s           │
+│         /*.parquet        ││                           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│        496,989 rows       ││           3 rows          │
+│           0.04s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

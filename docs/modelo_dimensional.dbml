@@ -1,0 +1,80 @@
+Table fact_telemetria {
+  event_id varchar [pk]
+  source_record_id bigint
+  date_sk int
+  vessel_sk bigint
+  river_sk int
+  route_sk int
+  event_time timestamp
+  ingestion_time timestamp
+  speed_kmh double
+  ingestion_delay_s double
+  anomaly_sample int
+  late_sample int
+  event_count int
+}
+Table dim_tiempo {
+  date_sk int [pk]
+  fecha date
+  anio int
+  mes int
+  trimestre int
+}
+Table dim_embarcacion {
+  vessel_sk bigint [pk]
+  vessel_id varchar
+  operator_name varchar
+  service_class varchar
+  valid_from timestamp
+  valid_to timestamp
+  is_current boolean
+}
+Table dim_rio {
+  river_sk int [pk]
+  river_name varchar
+}
+Table dim_ruta {
+  route_sk int [pk]
+  route_id varchar
+  river_name varchar
+}
+Ref: fact_telemetria.date_sk > dim_tiempo.date_sk
+Ref: fact_telemetria.vessel_sk > dim_embarcacion.vessel_sk
+Ref: fact_telemetria.river_sk > dim_rio.river_sk
+Ref: fact_telemetria.route_sk > dim_ruta.route_sk
+
+Table agg_embarcacion_hora {
+  hour_utc timestamp
+  vessel_sk bigint
+  river_sk int
+  route_sk int
+  event_count bigint
+  anomaly_samples bigint
+  late_samples bigint
+  speed_sum double
+  speed_count bigint
+  speed_max double
+  delay_sum double
+  indexes {
+    (hour_utc, vessel_sk, river_sk, route_sk) [pk]
+  }
+}
+Ref: agg_embarcacion_hora.vessel_sk > dim_embarcacion.vessel_sk
+Ref: agg_embarcacion_hora.river_sk > dim_rio.river_sk
+Ref: agg_embarcacion_hora.route_sk > dim_ruta.route_sk
+
+Table agg_rio_mes {
+  year int
+  month int
+  river_sk int
+  event_count bigint
+  anomaly_samples bigint
+  late_samples bigint
+  speed_sum double
+  speed_count bigint
+  delay_sum double
+  indexes {
+    (year, month, river_sk) [pk]
+  }
+}
+Ref: agg_rio_mes.river_sk > dim_rio.river_sk

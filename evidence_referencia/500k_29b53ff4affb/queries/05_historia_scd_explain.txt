@@ -1,0 +1,135 @@
+┌─────────────────────────────────────┐
+│┌───────────────────────────────────┐│
+││    Query Profiling Information    ││
+│└───────────────────────────────────┘│
+└─────────────────────────────────────┘
+EXPLAIN ANALYZE -- Q5. Cambio real en el fixture académico, lookup según tiempo del evento. SELECT v.vessel_id,v.operator_name,v.service_class,v.valid_from,v.valid_to,  count(f.event_id) AS muestras,  round(avg(f.speed_kmh),3) AS velocidad_media_kmh FROM dim_embarcacion v LEFT JOIN fact_telemetria f ON f.vessel_sk=v.vessel_sk WHERE v.vessel_id='TA-001' GROUP BY v.vessel_id,v.operator_name,v.service_class,v.valid_from,v.valid_to ORDER BY v.valid_from; 
+┌────────────────────────────────────────────────┐
+│┌──────────────────────────────────────────────┐│
+││              Total Time: 0.151s              ││
+│└──────────────────────────────────────────────┘│
+└────────────────────────────────────────────────┘
+┌───────────────────────────┐
+│           QUERY           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│      EXPLAIN_ANALYZE      │
+│    ────────────────────   │
+│                           │
+│           0 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│          ORDER_BY         │
+│    ────────────────────   │
+│      v.valid_from ASC     │
+│                           │
+│                           │
+│                           │
+│           2 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         vessel_id         │
+│       operator_name       │
+│       service_class       │
+│         valid_from        │
+│          valid_to         │
+│          muestras         │
+│    velocidad_media_kmh    │
+│                           │
+│                           │
+│                           │
+│           2 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│       HASH_GROUP_BY       │
+│    ────────────────────   │
+│          Groups:          │
+│             #0            │
+│             #1            │
+│             #2            │
+│             #3            │
+│             #4            │
+│                           │
+│        Aggregates:        │
+│         count(#5)         │
+│          avg(#6)          │
+│                           │
+│                           │
+│                           │
+│           2 rows          │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         PROJECTION        │
+│    ────────────────────   │
+│         vessel_id         │
+│       operator_name       │
+│       service_class       │
+│         valid_from        │
+│          valid_to         │
+│          event_id         │
+│         speed_kmh         │
+│                           │
+│                           │
+│                           │
+│          621 rows         │
+│           0.00s           │
+└─────────────┬─────────────┘
+┌─────────────┴─────────────┐
+│         HASH_JOIN         │
+│    ────────────────────   │
+│      Join Type: RIGHT     │
+│                           │
+│        Conditions:        │
+│   vessel_sk = vessel_sk   ├──────────────┐
+│                           │              │
+│                           │              │
+│                           │              │
+│          621 rows         │              │
+│           0.00s           │              │
+└─────────────┬─────────────┘              │
+┌─────────────┴─────────────┐┌─────────────┴─────────────┐
+│         TABLE_SCAN        ││         TABLE_SCAN        │
+│    ────────────────────   ││    ────────────────────   │
+│         Function:         ││         Function:         │
+│        READ_PARQUET       ││        READ_PARQUET       │
+│                           ││                           │
+│        Projections:       ││        Projections:       │
+│          event_id         ││         vessel_sk         │
+│         vessel_sk         ││         vessel_id         │
+│         speed_kmh         ││       operator_name       │
+│                           ││       service_class       │
+│      Dynamic Filters:     ││         valid_from        │
+│  optional: vessel_sk IN   ││          valid_to         │
+│    (172639912135211149,   ││                           │
+│  1126220987821938738) AND ││          Filters:         │
+│    optional: vessel_sk>   ││     vessel_id='TA-001'    │
+│  =172639912135211149 AND  ││                           │
+│    optional: vessel_sk<   ││    Total Files Read: 1    │
+│  =1126220987821938738 AND ││                           │
+│  optional: vessel_sk IN BF││        Filename(s):       │
+│        (vessel_sk)        ││ C:/Users/Juan David/.codex│
+│                           ││ /visualizations/2026/09/03│
+│    Total Files Read: 3    ││  /01a067d3-fd1c-74b0-aaa2 │
+│                           ││       -6d1bb97178e3       │
+│        Filename(s):       ││   /taller3_lakehouse_v2   │
+│ C:/Users/Juan David/.codex││      /lakehouse/gold      │
+│ /visualizations/2026/09/03││/94be1ccb39cef7900103_29b53│
+│  /01a067d3-fd1c-74b0-aaa2 ││  ff4affb/dim_embarcacion  │
+│       -6d1bb97178e3       ││          .parquet         │
+│   /taller3_lakehouse_v2   ││                           │
+│      /lakehouse/gold      ││                           │
+│/94be1ccb39cef7900103_29b53││                           │
+│ ff4affb/fact_telemetria/**││                           │
+│         /*.parquet        ││           0.00s           │
+│                           ││                           │
+│                           ││                           │
+│                           ││                           │
+│          621 rows         ││           2 rows          │
+│           0.12s           ││          (0.00s)          │
+└───────────────────────────┘└───────────────────────────┘

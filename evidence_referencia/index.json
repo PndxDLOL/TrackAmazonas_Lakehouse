@@ -1,0 +1,20 @@
+[
+  {
+    "execution_id": "29b53ff4affb",
+    "folder": "evidence_referencia\\500k_29b53ff4affb",
+    "result": "PASS",
+    "bronze_rows": 505500,
+    "fact_rows": 496989,
+    "batch_id": "94be1ccb39cef7900103",
+    "scope": "Evidencia previa V2; las rutas de datos se regeneran con main.py."
+  },
+  {
+    "execution_id": "9593406b6562",
+    "folder": "evidence_referencia\\50k_9593406b6562",
+    "result": "PASS",
+    "bronze_rows": 50550,
+    "fact_rows": 49698,
+    "batch_id": "3ba122bff35036803914",
+    "scope": "Evidencia previa V2; las rutas de datos se regeneran con main.py."
+  }
+]

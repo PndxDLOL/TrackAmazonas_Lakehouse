@@ -1,0 +1,4 @@
+route_id,rio,muestras,tardias_pct,retraso_mediana_s,retraso_p95_s,retraso_p99_s
+R-Amazonas-sintetica,Amazonas,165912,5.248,1.963,4492.899,18084.471
+R-Caqueta-sintetica,Caqueta,165166,4.896,1.957,2.998,17965.535
+R-Putumayo-sintetica,Putumayo,165911,4.874,1.954,2.997,17898.304
